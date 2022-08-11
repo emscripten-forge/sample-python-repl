@@ -34,7 +34,7 @@ jobs:
           micromamba-version: "0.22.0"
 
       
-      - name: Build pyjs
+      - name: build page
         run: |
           micromamba activate pyjs-wasm
 
