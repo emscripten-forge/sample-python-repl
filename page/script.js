@@ -66,6 +66,10 @@ var Module = {};
 
   var pyjs = await createModule({print: print,printErr:printErr})
   Module = pyjs
+  pyjs.setStatus = function(txt){
+    console.log(txt)
+    document.getElementById("p1").innerHTML = txt
+  }
   var promise_core = await import('./python_data.js')
   pyjs.init()
 
