@@ -64,7 +64,7 @@ window.onload = () => {
 var Module = {};
 (async function() {
 
-  var pyjs = await createModule()
+  var pyjs = await createModule({print: print,printErr:printErr})
   Module = pyjs
   var promise_core = await import('./python_data.js')
   pyjs.init()
