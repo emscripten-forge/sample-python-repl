@@ -21,6 +21,10 @@ outputtext.value = ""
 
 default_txt = "\
 import pyjs\n\
+import numpy\n\
+\n\
+arr = numpy.random.rand(4,5)\n\
+print(arr)\n\
 "
 
 var editor = CodeMirror.fromTextArea(document.myform.inputtext, {
@@ -44,13 +48,21 @@ var logeditor = CodeMirror.fromTextArea(document.myform.outputtext, {
 logeditor.setSize(null, 200);
 
 
-const print = (text) => {
+function addToOutput(txt)
+{
+  logeditor.replaceRange(txt+"\n", CodeMirror.Pos(logeditor.lastLine()))
+  logeditor.scrollTo(CodeMirror.Pos(logeditor.lastLine()));
+}
 
-  logeditor.replaceRange(text+"\n", CodeMirror.Pos(logeditor.lastLine()))
-  editor.scrollTo(CodeMirror.Pos(logeditor.lastLine()));
+const print = (text) => {
+  addToOutput(text)
+
 }
 const printErr = (text) => {
-  logeditor.replaceRange("ERROR: "+text+"\n", CodeMirror.Pos(logeditor.lastLine()))
+  // these can be ignored
+  if(!text.startWith("Could not find platform dependent libraries") && ! text.startWith("Consider setting $PYTHONHOME")){
+    addToOutput("ERROR: "+text)
+  }
 }
 
 
@@ -61,25 +73,36 @@ window.onload = () => {
 
 
 
+function setStatus(txt){
+  if(txt.startsWith("Downloading data... ("))
+  {
+    var numbers = [];
+    txt.replace(/(\d[\d\.]*)/g, function( x ) { var n = Number(x); if (x == n) { numbers.push(x); }  })
+    var str = `Downloading data: ${numbers[0]} / ${numbers[1]}`
+    addToOutput(str)
+  }
+}
+
 var Module = {};
 (async function() {
 
+  addToOutput("CreateModule...")
   var pyjs = await createModule({print: print,printErr:printErr})
   Module = pyjs
-  pyjs.setStatus = function(txt){
-    console.log(txt)
-    document.getElementById("p1").innerHTML = txt
-  }
+  pyjs.setStatus = setStatus
+  addToOutput("Download data ...")
   var promise_core = await import('./python_data.js')
   pyjs.init()
 
   var deps = await pyjs._wait_run_dependencies()
+  addToOutput("...done")
   interpreter =  new pyjs.Interpreter()
   main_scope = pyjs.main_scope()
 
+  let btn = document.getElementById("run_button");
+  btn.disabled = false
 
-  let btn2 = document.getElementById("run_button");
-  btn2.onclick = function () {
+  btn.onclick = function () {
     logeditor.getDoc().setValue("")
     var text = editor.getValue();
     localStorage.setItem("text", text)
