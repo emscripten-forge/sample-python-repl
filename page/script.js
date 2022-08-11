@@ -52,6 +52,8 @@ function addToOutput(txt)
 {
   logeditor.replaceRange(txt+"\n", CodeMirror.Pos(logeditor.lastLine()))
   logeditor.scrollTo(CodeMirror.Pos(logeditor.lastLine()));
+  var info = logeditor.getScrollInfo();
+  logeditor.scrollTo(info.left,info.top + info.height);
 }
 
 const print = (text) => {
