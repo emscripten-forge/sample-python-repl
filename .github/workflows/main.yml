@@ -31,7 +31,7 @@ jobs:
         with:
           environment-file: env.yaml
           environment-name: pyjs-wasm
-          micromamba-version: "0.22.0"
+          micromamba-version: "0.23.2"
 
       
       - name: build page
