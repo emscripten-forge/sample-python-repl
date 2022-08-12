@@ -8,7 +8,7 @@ micromamba create -n pyjs-build-wasm \
     -c https://repo.mamba.pm/emscripten-forge \
     -c https://repo.mamba.pm/conda-forge \
     --yes \
-    "pyjs>=0.8.0" numpy
+    "pyjs==0.8.0" numpy
 
 # create build/work dir
 mkdir -p build

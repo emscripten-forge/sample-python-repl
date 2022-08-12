@@ -47,7 +47,7 @@ jobs:
             -c https://repo.mamba.pm/emscripten-forge \
             -c https://repo.mamba.pm/conda-forge \
             --yes \
-            "pyjs>=0.8.0" numpy
+            "pyjs==0.8.0" numpy
 
 
           # donload empack config
