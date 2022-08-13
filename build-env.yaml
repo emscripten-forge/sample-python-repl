@@ -1,4 +1,4 @@
-name: pyjs-wasm
+name: pyjs-build-env
 channels:
   - conda-forge
 dependencies:
