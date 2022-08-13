@@ -29,14 +29,14 @@ jobs:
       - name: Install mamba
         uses: mamba-org/provision-with-micromamba@main
         with:
-          environment-file: env.yaml
-          environment-name: build-env
+          environment-file: buuld-env.yaml
+          environment-name: pyjs-build-env
           micromamba-version: "0.23.2"
 
       
       - name: build page
         run: |
-          micromamba activate build-env
+          micromamba activate pyjs-build-env
 
           
           mkdir build
