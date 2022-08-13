@@ -47,7 +47,7 @@ jobs:
             -c https://repo.mamba.pm/emscripten-forge \
             -c https://repo.mamba.pm/conda-forge \
             --yes \
-            -f web-env.yaml
+            -f $GITHUB_WORKSPACE/web-env.yaml
 
 
           # donload empack config
