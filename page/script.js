@@ -94,9 +94,8 @@ var Module = {};
   pyjs.setStatus = setStatus
   addToOutput("Download data ...")
   var promise_core = await import('./python_data.js')
-  pyjs.init()
+  await pyjs.init()
 
-  var deps = await pyjs._wait_run_dependencies()
   addToOutput("...done")
   interpreter =  new pyjs.Interpreter()
   main_scope = pyjs.main_scope()

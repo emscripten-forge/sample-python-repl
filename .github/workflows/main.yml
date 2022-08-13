@@ -30,24 +30,24 @@ jobs:
         uses: mamba-org/provision-with-micromamba@main
         with:
           environment-file: env.yaml
-          environment-name: pyjs-wasm
+          environment-name: build-env
           micromamba-version: "0.23.2"
 
       
       - name: build page
         run: |
-          micromamba activate pyjs-wasm
+          micromamba activate build-env
 
           
           mkdir build
           pushd build
 
-          micromamba create -n pyjs-browser-env \
+          micromamba create -n pyjs-web-env \
             --platform=emscripten-32 \
             -c https://repo.mamba.pm/emscripten-forge \
             -c https://repo.mamba.pm/conda-forge \
             --yes \
-            "pyjs==0.8.0" numpy
+            -f web-env.yaml
 
 
           # donload empack config
@@ -57,7 +57,7 @@ jobs:
 
 
           # pack the environment in a js/data file
-          empack pack env --env-prefix $MAMBA_ROOT_PREFIX/envs/pyjs-browser-env --outname python_data --config empack_config.yaml
+          empack pack env --env-prefix $MAMBA_ROOT_PREFIX/envs/pyjs-web-env --outname python_data --config empack_config.yaml
 
 
           # copy relevant files from build to page
@@ -66,7 +66,7 @@ jobs:
 
 
           # copy relevant files from env to page
-          cp $MAMBA_ROOT_PREFIX/envs/pyjs-browser-env/lib_js/pyjs/pyjs_runtime_browser* ../page
+          cp $MAMBA_ROOT_PREFIX/envs/pyjs-web-env/lib_js/pyjs/pyjs_runtime_browser* ../page
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
