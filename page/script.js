@@ -97,7 +97,6 @@ var Module = {};
   await pyjs.init()
 
   addToOutput("...done")
-  interpreter =  new pyjs.Interpreter()
   main_scope = pyjs.main_scope()
 
   let btn = document.getElementById("run_button");
@@ -109,7 +108,7 @@ var Module = {};
     localStorage.setItem("text", text)
 
     try{
-        interpreter.exec(text, main_scope)
+        pyjs.exec(text, main_scope)
     }
     catch (e) {
       logeditor.replaceRange(JSON.stringify(e.message)+"\n", CodeMirror.Pos(logeditor.lastLine()))
