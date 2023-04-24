@@ -39,4 +39,16 @@ Pack the environment:
 empack pack env --env-prefix $MAMBA_ROOT_PREFIX/envs/pyjs-web-env
 ```
 
-This will produce a list of `.tar.gz` files in the `build` directory.
+This will generate a list of `.tar.gz` files in the `build` directory.
+
+Now copy the HTML and JavaScript files from the `page` directory to the `build` directory:
+
+```bash
+cp ../page/* .
+```
+
+You will also need to copy the browser runtime from the `pyjs-web-env` environment to the `build` directory:
+
+```bash
+cp $MAMBA_ROOT_PREFIX/envs/pyjs-web-env/lib_js/pyjs/pyjs_runtime_browser.js .
+```
