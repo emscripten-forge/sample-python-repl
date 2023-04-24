@@ -1,4 +1,4 @@
-var banner =
+const banner =
   "\n\
   ______ __  __  _____  _____ _____  _____ _____ _______ ______ _   _     \n\
  |  ____|  \\/  |/ ____|/ ____|  __ \\|_   _|  __ \\__   __|  ____| \\ | |\n\
@@ -26,10 +26,9 @@ arr = numpy.random.rand(4,5)\n\
 print(arr)\n\
 ";
 
-var editor = CodeMirror.fromTextArea(document.myform.inputtext, {
+const editor = CodeMirror.fromTextArea(document.myform.inputtext, {
   lineNumbers: true,
   mode: "python",
-  //  add theme attribute like so:
   theme: "monokai",
   extraKeys: {
     Tab: function (cm) {
@@ -39,7 +38,7 @@ var editor = CodeMirror.fromTextArea(document.myform.inputtext, {
 });
 editor.setSize(null, 600);
 
-var logeditor = CodeMirror.fromTextArea(document.myform.outputtext, {
+const logeditor = CodeMirror.fromTextArea(document.myform.outputtext, {
   lineNumbers: false,
   readOnly: true,
   //  add theme attribute like so:
@@ -50,7 +49,7 @@ logeditor.setSize(null, 200);
 function addToOutput(txt) {
   logeditor.replaceRange(txt + "\n", CodeMirror.Pos(logeditor.lastLine()));
   logeditor.scrollTo(CodeMirror.Pos(logeditor.lastLine()));
-  var info = logeditor.getScrollInfo();
+  const info = logeditor.getScrollInfo();
   logeditor.scrollTo(info.left, info.top + info.height);
 }
 
@@ -68,26 +67,12 @@ const printErr = (text) => {
 };
 
 window.onload = () => {
-  var savedText = localStorage.getItem("text") || default_txt;
+  const savedText = localStorage.getItem("text") || default_txt;
   editor.getDoc().setValue(savedText);
 };
 
-function setStatus(txt) {
-  if (txt.startsWith("Downloading data... (")) {
-    var numbers = [];
-    txt.replace(/(\d[\d\.]*)/g, function (x) {
-      var n = Number(x);
-      if (x == n) {
-        numbers.push(x);
-      }
-    });
-    var str = `Downloading data: ${numbers[0]} / ${numbers[1]}`;
-    addToOutput(str);
-  }
-}
-
 async function make_pyjs(print, error) {
-  var pyjs = await createModule({ print: print, error: print });
+  const pyjs = await createModule({ print: print, error: print });
 
   await pyjs.bootstrap_from_empack_packed_environment(
     `./empack_env_meta.json` /* packages_json_url */,
@@ -95,32 +80,24 @@ async function make_pyjs(print, error) {
     false /* verbose */
   );
 
-  globalThis.pyjs = pyjs;
   return pyjs;
 }
 
-globalThis.make_pyjs = make_pyjs;
-
-
-var Module = {};
+const Module = {};
 (async function () {
-  addToOutput("CreateModule...");
-  var pyjs = await createModule({ print: print, printErr: printErr });
-  Module = pyjs;
-  pyjs.setStatus = setStatus;
   addToOutput("Download data ...");
-  var pyjs = await make_pyjs(print, print);
+  const pyjs = await make_pyjs(print, print);
   await pyjs.init();
 
   addToOutput("...done");
   main_scope = pyjs.main_scope();
 
-  let btn = document.getElementById("run_button");
+  const btn = document.getElementById("run_button");
   btn.disabled = false;
 
   btn.onclick = function () {
     logeditor.getDoc().setValue("");
-    var text = editor.getValue();
+    const text = editor.getValue();
     localStorage.setItem("text", text);
 
     try {

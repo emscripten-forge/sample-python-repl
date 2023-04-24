@@ -52,3 +52,5 @@ You will also need to copy the browser runtime from the `pyjs-web-env` environme
 ```bash
 cp $MAMBA_ROOT_PREFIX/envs/pyjs-web-env/lib_js/pyjs/pyjs_runtime_browser.js .
 ```
+
+Finally open the `build/index.html` file in your browser.
