@@ -24,7 +24,7 @@ jobs:
 
       - name: Build the page
         run: |
-          # TODO: run build script
+          python build.py --env-name pyjs-web-env
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

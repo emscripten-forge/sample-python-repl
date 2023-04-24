@@ -2,6 +2,10 @@
 
 A demo repository for create a Python REPL that runs in the browser.
 
+## Requirements
+
+You will need to install [micromamba](https://mamba.readthedocs.io/en/latest/installation.html#micromamba) to build the application.
+
 ## Usage
 
 First clone the repository:
