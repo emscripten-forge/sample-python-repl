@@ -22,7 +22,7 @@ def create_env(env_name):
     )
 
 
-def pack_env(env_prefix, cwd):
+def pack_env(env_prefix, output_dir):
     subprocess.run(
         [
             "empack",
@@ -32,9 +32,11 @@ def pack_env(env_prefix, cwd):
             str(env_prefix),
             "--relocate-prefix",
             "/",
+            "--no-use-cache",
+            "--outdir",
+            output_dir,
         ],
         check=True,
-        cwd=cwd,
     )
 
 
@@ -54,7 +56,7 @@ def main(env_name):
     env_prefix = Path(
         os.environ.get("MAMBA_ROOT_PREFIX", f"/opt/conda/envs/{env_name}")
     )
-    pack_env(env_prefix / "envs" / env_name, cwd=build_dir)
+    pack_env(env_prefix / "envs" / env_name, output_dir=str(build_dir))
 
     # copy relevant files
     page_dir = Path("page")
