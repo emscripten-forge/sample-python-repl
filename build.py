@@ -23,7 +23,6 @@ def create_env(env_name):
 
 
 def pack_env(env_prefix, cwd):
-    print(env_prefix)
     subprocess.run(
         [
             "empack",
