@@ -5,73 +5,45 @@ on:
   push:
   pull_request:
 
-
 defaults:
   run:
     shell: bash -l {0}
 
-
 jobs:
-
-  build_page:
-
+  build:
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        emsdk_ver: ["3.1.2"]
-
     steps:
-      - uses: actions/checkout@v2
-
+      - uses: actions/checkout@v3
 
       - name: Install mamba
         uses: mamba-org/provision-with-micromamba@main
         with:
-          environment-file: build-env.yaml
+          environment-file: build-environment.yaml
           environment-name: pyjs-build-env
-          micromamba-version: "0.23.2"
+          micromamba-version: "1.4.2"
 
-      
-      - name: build page
+      - name: Build the page
         run: |
-          micromamba activate pyjs-build-env
+          python build.py --env-name pyjs-web-env
 
-          
-          mkdir build
-          pushd build
-
-          micromamba create -n pyjs-web-env \
-            --platform=emscripten-32 \
-            -c https://repo.mamba.pm/emscripten-forge \
-            -c https://repo.mamba.pm/conda-forge \
-            --yes \
-            -f $GITHUB_WORKSPACE/web-env.yaml
-
-
-          # donload empack config
-          EMPACK_CONFIG=empack_config.yaml
-          echo "donwload empack config"
-          wget -O $EMPACK_CONFIG https://raw.githubusercontent.com/emscripten-forge/recipes/main/empack_config.yaml
-
-
-          # pack the environment in a js/data file
-          empack pack env --env-prefix $MAMBA_ROOT_PREFIX/envs/pyjs-web-env --outname python_data --config empack_config.yaml
-
-
-          # copy relevant files from build to page
-          cp python_data.js   ../page  
-          cp python_data.data ../page
-
-
-          # copy relevant files from env to page
-          cp $MAMBA_ROOT_PREFIX/envs/pyjs-web-env/lib_js/pyjs/pyjs_runtime_browser* ../page
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./page
-          enable_jekyll: false
+          path: ./build
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
