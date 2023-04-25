@@ -2,6 +2,12 @@
 
 A demo repository for create a Python REPL that runs in the browser.
 
+![a screenshot showing the Pyhon REPL in the browser](https://user-images.githubusercontent.com/591645/234264366-1bf9331e-da99-452f-9e66-69c5fcf7f34b.png)
+
+## Try it in your browser
+
+You can try the Python REPL in your browser at the following URL: https://emscripten-forge.github.io/sample-python-repl
+
 ## Requirements
 
 You will need to install [micromamba](https://mamba.readthedocs.io/en/latest/installation.html#micromamba) to build the application.
