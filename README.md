@@ -24,37 +24,19 @@ micromamba create -n pyjs-build-env -f build-environment.yaml -y
 micromamba activate pyjs-build-env
 ```
 
-Now create a new environment that will include the dependencies for running the REPL in the browser:
+In the environment, run the build script:
 
 ```bash
-micromamba create -n pyjs-web-env --platform=emscripten-32 -f web-environment.yaml -y
+python build.py
 ```
 
-Create a new build directory and configure the build:
+This create a new environment that will include the dependencies for running the REPL in the browser (runtime).
+The script also copies the relevant files to the `build` folder.
+
+You can then start an HTTP server to serve the files in the `build` folder:
 
 ```bash
-mkdir build
-cd build
+python -m http.server --directory build
 ```
 
-Pack the environment:
-
-```bash
-empack pack env --env-prefix $MAMBA_ROOT_PREFIX/envs/pyjs-web-env
-```
-
-This will generate a list of `.tar.gz` files in the `build` directory.
-
-Now copy the HTML and JavaScript files from the `page` directory to the `build` directory:
-
-```bash
-cp ../page/* .
-```
-
-You will also need to copy the browser runtime from the `pyjs-web-env` environment to the `build` directory:
-
-```bash
-cp $MAMBA_ROOT_PREFIX/envs/pyjs-web-env/lib_js/pyjs/pyjs_runtime_browser.js .
-```
-
-Finally open the `build/index.html` file in your browser.
+And open the REPL in your browser at http://localhost:8000.
