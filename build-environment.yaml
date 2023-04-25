@@ -3,4 +3,4 @@ channels:
   - conda-forge
 dependencies:
   - python
-  - empack >= 3.0.0
+  - empack >= 3.0.0,<4.0.0
